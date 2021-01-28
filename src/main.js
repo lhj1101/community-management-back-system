@@ -3,10 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
-// element按需引入
-import {
-  Button, Select
-} from 'element-ui'
+
+// 全局导入css
+import './assets/css/all.css'
+// element完整引入
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 // 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口。
 import * as echarts from 'echarts/core'
@@ -19,9 +21,8 @@ import {
   BarChart
 } from 'echarts/charts'
 
-// // element按需使用
-Vue.use(Button)
-Vue.use(Select)
+// element完整使用
+Vue.use(ElementUI)
 
 // 注册echarts必须的组件
 echarts.use(
