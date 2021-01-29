@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 
+// 解决路由地址重复的报错问题
+import VueRouter from 'vue-router'
+
 // 全局导入css
 import './assets/css/all.css'
 // element完整引入
@@ -35,6 +38,13 @@ echarts.use(
 Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
+
+// 解决路由地址重复的报错问题
+Vue.use(VueRouter)
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 new Vue({
   router,

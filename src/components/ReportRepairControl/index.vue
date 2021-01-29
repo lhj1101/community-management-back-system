@@ -1,6 +1,12 @@
 <template>
   <div>
-    报修管理
+    <el-row>
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-card class="box-card">
+          报修
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -15,4 +21,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.box-card{
+  min-height: calc(100vh - 158px);
+}
 </style>

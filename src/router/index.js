@@ -17,63 +17,68 @@ const routes = [
     children: [
       {
         path: '/index',
-        name: 'Home',
+        name: '首页',
         component: () => import('../components/Home/index.vue')
       },
       {
         path: '/noticeControl',
-        name: 'NoticeControl',
+        name: '通知公告',
         component: () => import('../components/NoticeControl/index.vue')
       },
       {
         path: '/communityActivityControl',
-        name: 'CommunityActivityControl',
+        name: '小区活动',
         component: () => import('../components/CommunityActivityControl/index.vue')
       },
       {
         path: '/organizingActivityControl',
-        name: 'OrganizingActivityControl',
+        name: '组织活动',
         component: () => import('../components/OrganizingActivityControl/index.vue')
       },
       {
         path: '/visitorControl',
-        name: 'VisitorControl',
+        name: '访客通道',
         component: () => import('../components/VisitorControl/index.vue')
       },
       {
         path: '/reportRepairControl',
-        name: 'ReportRepairControl',
+        name: '损坏报修',
         component: () => import('../components/ReportRepairControl/index.vue')
       },
       {
         path: '/reportLossControl',
-        name: 'ReportLossControl',
+        name: '失物报备',
         component: () => import('../components/ReportLossControl/index.vue')
       },
       {
         path: '/complaintsComplaintControl',
-        name: 'ComplaintsComplaintControl',
+        name: '投诉建议',
         component: () => import('../components/ComplaintsComplaintControl/index.vue')
       },
       {
         path: '/marketControl',
-        name: 'MarketControl',
+        name: '二手市场',
         component: () => import('../components/MarketControl/index.vue')
       },
       {
         path: '/shareControl',
-        name: 'ShareControl',
+        name: '分享墙',
         component: () => import('../components/ShareControl/index.vue')
       },
       {
         path: '/accountControl',
-        name: 'AccountControl',
+        name: '账号管理',
         component: () => import('../components/AccountControl/index.vue')
       },
       {
         path: '/houseHoldControl',
-        name: 'HouseHoldControl',
+        name: '住户管理',
         component: () => import('../components/HouseHoldControl/index.vue')
+      },
+      {
+        path: '/adminAccountControl',
+        name: '管理员账号',
+        component: () => import('../components/AdminAccountControl/index.vue')
       }
     ]
   }

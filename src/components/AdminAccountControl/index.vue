@@ -3,7 +3,7 @@
     <el-row>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-card class="box-card">
-          住户管理
+          管理员
         </el-card>
       </el-col>
     </el-row>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'HouseHoldControl',
+  name: 'AdminAccountControl',
   data () {
     return {
     }

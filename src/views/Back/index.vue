@@ -1,9 +1,9 @@
 <template>
   <div class="back">
     <el-container>
-      <el-aside ref="aside" class="back-aside" :width="isCollapse ? '0' : '200px'">
+      <el-aside ref="aside" class="back-aside" :width="isCollapse ? '64px' : '200px'">
         <el-menu
-          :default-active="activePath"
+          :default-active="$route.path"
           class="el-menu-vertical-demo"
           router
           unique-opened
@@ -17,7 +17,9 @@
               <i class="el-icon-location"></i>
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item :index="'/' + subItem.path" v-for="(subItem) in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
+             <!-- @click="saveNavState('/' + subItem.path)" -->
+            <!-- , changeComponent(subItem.ComponentName) -->
+            <el-menu-item :index="'/' + subItem.path" v-for="(subItem) in item.children" :key="subItem.id">
               {{subItem.authName}}
             </el-menu-item>
           </el-submenu>
@@ -43,7 +45,24 @@
           </el-row>
         </el-header>
         <el-main class="back-main">
-          <router-view />
+          <el-tabs
+            v-model="activeIndex"
+            type="card"
+            @tab-click="clickTab"
+            @tab-remove="removeTab"
+            v-if="openTab.length"
+            closable
+          >
+            <el-tab-pane
+              v-for="(item) of openTab"
+              :key="item.name"
+              :label="item.name"
+              :name="item.route"
+            >
+              <router-view />
+            </el-tab-pane>
+          </el-tabs>
+          <!-- <component :is="isComponent"></component> -->
         </el-main>
       </el-container>
     </el-container>
@@ -51,12 +70,15 @@
 </template>
 
 <script>
+// import Home from '../../components/Home/index'
+// import NoticeControl from '../../components/NoticeControl/index'
 export default {
   name: 'Back',
   data () {
     return {
+      // isComponent: 'Home',
       isCollapse: false,
-      activePath: sessionStorage.getItem('activePath') || '/index',
+      // activePath: sessionStorage.getItem('activePath') || '/index',
       menu: [
         {
           id: '100',
@@ -66,7 +88,8 @@ export default {
             {
               id: '101',
               authName: '首页',
-              path: 'index'
+              path: 'index',
+              ComponentName: 'Home'
             }
           ]
         },
@@ -78,7 +101,8 @@ export default {
             {
               id: '201',
               authName: '通知公告',
-              path: 'noticeControl'
+              path: 'noticeControl',
+              ComponentName: 'NoticeControl'
             },
             {
               id: '202',
@@ -152,26 +176,105 @@ export default {
               path: 'accountControl'
             }
           ]
+        },
+        {
+          id: '600',
+          authName: '后台管理',
+          path: '/',
+          children: [
+            {
+              id: '601',
+              authName: '管理员账号',
+              path: 'adminAccountControl'
+            }
+          ]
         }
       ]
     }
   },
+  // components: {
+  //   Home,
+  //   NoticeControl
+  // },
   created () {
     this.createcollapsed()
   },
+  watch: {
+    '$route' (to, from) {
+      let flag = false
+      for (const item of this.openTab) {
+        if (item.name === to.name) {
+          this.$store.commit('set_active_index', to.path)
+          flag = true
+          break
+        }
+      }
+      if (!flag) {
+        this.$store.commit('add_tabs', { route: to.path, name: to.name })
+        this.$store.commit('set_active_index', to.path)
+      }
+    }
+  },
+  mounted () {
+    // 刷新时以当前路由做为tab加入tabs
+    // 当前路由不是首页时，添加首页以及另一页到store里，并设置激活状态
+    // 当当前路由是首页时，添加首页到store，并设置激活状态
+    if (this.$route.path !== '/' && this.$route.path !== '/index') {
+      this.$store.commit('add_tabs', { route: '/index', name: '首页' })
+      this.$store.commit('add_tabs', { route: this.$route.path, name: this.$route.name })
+      this.$store.commit('set_active_index', this.$route.path)
+    } else {
+      this.$store.commit('add_tabs', { route: '/index', name: '首页' })
+      this.$store.commit('set_active_index', '/index')
+    }
+  },
+  computed: {
+    openTab () {
+      return this.$store.state.openTab
+    },
+    activeIndex: {
+      get () {
+        return this.$store.state.activeIndex
+      },
+      set (val) {
+        this.$store.commit('set_active_index', val)
+      }
+    }
+  },
   methods: {
+    clickTab (tab) {
+      this.$router.push({ path: this.activeIndex })
+      console.log(this.$route.path)
+    },
+    removeTab (target) {
+      if (target === '/' || target === '/index') {
+        return
+      }
+      this.$store.commit('delete_tabs', target)
+      if (this.activeIndex === target) {
+        // 设置当前激活的路由
+        if (this.openTab && this.openTab.length >= 1) {
+          console.log('=============', this.openTab[this.openTab.length - 1].route)
+          this.$store.commit('set_active_index', this.openTab[this.openTab.length - 1].route)
+          this.$router.push({ path: this.activeIndex })
+        }
+      }
+    },
     toggleCollapsed () {
       this.isCollapse = !this.isCollapse
     },
-    saveNavState (activePath) {
-      sessionStorage.setItem('activePath', activePath)
-      this.activePath = sessionStorage.getItem('activePath')
-    },
+    // saveNavState (activePath) {
+    //   sessionStorage.setItem('activePath', activePath)
+    //   this.activePath = sessionStorage.getItem('activePath')
+    // },
     createcollapsed () {
       if (document.body.clientWidth <= 768) {
         this.isCollapse = !this.isCollapse
       }
     }
+    // changeComponent (curComponentName) {
+    //   this.isComponent = curComponentName
+    // }
   }
 }
 </script>
@@ -186,6 +289,7 @@ export default {
     left: 0;
     top: 0;
     padding-top: 60px;
+    z-index: 7777;
     height: calc(100vh - 60px) !important;
   }
   .el-header{
@@ -197,11 +301,12 @@ export default {
 }
 .el-menu{
   border-right-width: 0;
+  height: calc(100vh);
 }
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  height: 100%;
-}
+// .el-menu-vertical-demo:not(.el-menu--collapse) {
+//   width: 200px;
+//   height: 100%;
+// }
 .back-right{
   height: 100vh;
 }
