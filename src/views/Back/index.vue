@@ -37,10 +37,22 @@
               <div class="back-header-title">
                 <span class="back-header-title-span">物业管理系统</span>
               </div>
-              <div class="back-header-info">
+              <!-- <div class="back-header-info">
                 <i class="el-icon-user"></i>
                 <span class="back-header-info-span">物管哥1号</span>
-              </div>
+              </div> -->
+              <el-dropdown>
+                <span class="el-dropdown-link back-header-info">
+                  <i class="el-icon-user back-header-info-user"></i>
+                  <span class="back-header-info-span">物管哥1号</span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <router-link to="/adminAccountControl">
+                    <el-dropdown-item>账号信息</el-dropdown-item>
+                  </router-link>
+                  <el-dropdown-item divided>退出系统</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </el-col>
           </el-row>
         </el-header>
@@ -139,7 +151,7 @@ export default {
             {
               id: '305',
               authName: '投诉建议',
-              path: 'complaintsComplaintControl'
+              path: 'complaintControl'
             }
           ]
         },
@@ -289,7 +301,7 @@ export default {
     left: 0;
     top: 0;
     padding-top: 60px;
-    z-index: 7777;
+    z-index: 10;
     height: calc(100vh - 60px) !important;
   }
   .el-header{
@@ -398,5 +410,21 @@ export default {
   .back-header-info > span {
     display: none;
   }
+  .el-dropdown{
+    width: 70px;
+  }
+  .back-header-info-user{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 0;
+  }
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409EFF;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>

@@ -51,9 +51,9 @@ const routes = [
         component: () => import('../components/ReportLossControl/index.vue')
       },
       {
-        path: '/complaintsComplaintControl',
+        path: '/complaintControl',
         name: '投诉建议',
-        component: () => import('../components/ComplaintsComplaintControl/index.vue')
+        component: () => import('../components/ComplaintControl/index.vue')
       },
       {
         path: '/marketControl',

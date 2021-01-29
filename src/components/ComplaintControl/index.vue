@@ -1,37 +1,52 @@
 <template>
-  <div class="notice-control">
+  <div class="complaint-control">
     <el-row>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-card class="box-card">
-          <div class="notice-control-new">
-            <el-button type="primary" plain>+ 新建公告</el-button>
+          <div class="complaint-control-new">
+            <el-button type="primary" plain>+ 投诉建议</el-button>
           </div>
-          <div class="notice-control-search">
-            <el-input class="notice-control-search-input" v-model="searchTitle" clearable placeholder="请输入公告标题"></el-input>
+          <div class="complaint-control-search">
+            <el-select class="complaint-control-search-input" v-model="searchDirection" clearable placeholder="请选择投诉建议方向">
+              <el-option
+                v-for="item in optionsDirection"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-select class="complaint-control-search-input" v-model="searchImprove" clearable placeholder="请选择是否已经改善">
+              <el-option
+                v-for="item in optionsImprove"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <el-date-picker
-              class="notice-control-search-input"
+              class="complaint-control-search-input"
               v-model="searchYear"
               type="year"
               placeholder="选择年">
             </el-date-picker>
             <el-date-picker
-              class="notice-control-search-input"
+              class="complaint-control-search-input"
               v-model="searchMonth"
               type="month"
               placeholder="选择月">
             </el-date-picker>
             <el-date-picker
-              class="notice-control-search-input"
+              class="complaint-control-search-input"
               v-model="searchDate"
               align="right"
               type="date"
               placeholder="选择日期"
               :picker-options="pickerOptions">
             </el-date-picker>
-            <el-button class="notice-control-search-btn" plain type="primary" slot="append" icon="el-icon-search">查询</el-button>
-            <el-button class="notice-control-search-btn" plain type="info" slot="append" icon="el-icon-delete">清空</el-button>
+            <el-button class="complaint-control-search-btn" plain type="primary" slot="append" icon="el-icon-search">查询</el-button>
+            <el-button class="complaint-control-search-btn" plain type="info" slot="append" icon="el-icon-delete">清空</el-button>
           </div>
-          <div class="notice-control-table">
+          <div class="complaint-control-table">
             <el-table
               :data="tableData"
               border
@@ -65,7 +80,7 @@
             </el-table>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
               <el-pagination
-                class="notice-control-pagination"
+                class="complaint-control-pagination"
                 :current-page="1"
                 :page-size="5"
                 layout="total, prev, pager, next, jumper"
@@ -81,10 +96,11 @@
 
 <script>
 export default {
-  name: 'NoticeControl',
+  name: 'ComplaintsComplaintControl',
   data () {
     return {
-      searchTitle: '',
+      searchDirection: '',
+      searchImprove: '',
       searchYear: '',
       searchMonth: '',
       searchDate: '',
@@ -93,6 +109,36 @@ export default {
           return time.getTime() > Date.now()
         }
       },
+      optionsDirection: [
+        {
+          value: '1',
+          label: '管理'
+        }, {
+          value: '2',
+          label: '服务'
+        }, {
+          value: '3',
+          label: '安保'
+        }, {
+          value: '4',
+          label: '环境'
+        }, {
+          value: '5',
+          label: '卫生'
+        }, {
+          value: '6',
+          label: '其他'
+        }
+      ],
+      optionsImprove: [
+        {
+          value: true,
+          label: '已改善'
+        }, {
+          value: false,
+          label: '未改善'
+        }
+      ],
       tableData: [{
         date: '2016-05-03',
         name: '王小虎',
@@ -159,21 +205,21 @@ export default {
 .box-card{
   min-height: calc(100vh - 158px);
 }
-.notice-control-search{
+.complaint-control-search{
   margin-top: 6px;
 }
-.notice-control-search-input{
+.complaint-control-search-input{
   width: 200px;
   margin-top: 4px;
   margin-right: 10px;
 }
-.notice-control-search-btn{
+.complaint-control-search-btn{
   margin-top: 4px;
 }
-.notice-control-table{
+.complaint-control-table{
   margin-top: 10px;
 }
-.notice-control-pagination{
+.complaint-control-pagination{
   margin-top: 10px;
   display: flex;
   justify-content: center;
