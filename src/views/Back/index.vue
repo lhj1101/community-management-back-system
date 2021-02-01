@@ -50,7 +50,9 @@
                   <router-link to="/adminAccountControl">
                     <el-dropdown-item>账号信息</el-dropdown-item>
                   </router-link>
-                  <el-dropdown-item divided>退出系统</el-dropdown-item>
+                  <el-dropdown-item divided>
+                    <el-button type="info" @click="logout">退出</el-button>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -254,6 +256,14 @@ export default {
     }
   },
   methods: {
+    logout () {
+      this.$message({
+        message: '退出登录',
+        duration: 2000
+      })
+      this.$store.commit('outLogin')
+      this.$router.push('/login')
+    },
     clickTab (tab) {
       this.$router.push({ path: this.activeIndex })
       console.log(this.$route.path)

@@ -32,6 +32,10 @@ export default new Vuex.Store({
     },
     set_active_index (state, index) {
       this.state.activeIndex = index
+    },
+    outLogin () {
+      this.state.activeIndex = ''
+      this.state.openTab = []
     }
   }
 })

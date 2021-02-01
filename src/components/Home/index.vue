@@ -122,6 +122,9 @@ export default {
         }]
       }
       option && myChart.setOption(option)
+      window.addEventListener('resize', () => {
+        myChart.resize()
+      })
     },
     qqq () {
       var myChart = this.$echarts.init(this.$refs.qqq)
@@ -154,6 +157,9 @@ export default {
         ]
       }
       option && myChart.setOption(option)
+      window.addEventListener('resize', () => {
+        myChart.resize()
+      })
     },
     www () {
       var myChart = this.$echarts.init(this.$refs.www)
@@ -189,6 +195,9 @@ export default {
         ]
       }
       option && myChart.setOption(option)
+      window.addEventListener('resize', () => {
+        myChart.resize()
+      })
     },
     typea () {
       var myChart = this.$echarts.init(this.$refs.typea)
@@ -227,6 +236,9 @@ export default {
         ]
       }
       option && myChart.setOption(option)
+      window.addEventListener('resize', () => {
+        myChart.resize()
+      })
     }
   }
 }
