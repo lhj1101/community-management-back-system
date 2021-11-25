@@ -76,18 +76,41 @@ export default {
         if (valid) {
           console.log(valid)
           console.log(this.ruleForm.account)
-          console.log(this.ruleForm.pass)
+          console.log(this.ruleForm.password)
           console.log(this.ruleForm.checkPass)
-          if (this.ruleForm.account === 'admin' & this.ruleForm.pass === '123456' & this.ruleForm.checkPass === '123456') {
-            this.$message({
-              message: '登录成功',
-              type: 'success',
-              duration: 2000
+          this.$axios.post('api/admin/login', {
+            account: this.ruleForm.account,
+            password: this.ruleForm.pass
+          })
+            .then(res => {
+              console.log(res)
+              if (res.data.errno === 0) {
+                this.$message({
+                  message: '登录成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                localStorage.setItem('adminId', res.data.data[0].id)
+                localStorage.setItem('adminName', res.data.data[0].admin_name)
+                this.$router.push('/back')
+              } else {
+                this.$message.error('登录失败')
+              }
             })
-            this.$router.push('/back')
-          } else {
-            this.$message.error('登录失败')
-          }
+            .catch(err => {
+              console.log(err)
+              this.$message.error('登录失败')
+            })
+          // if (this.ruleForm.account === 'admin' & this.ruleForm.pass === '123456' & this.ruleForm.checkPass === '123456') {
+            // this.$message({
+            //   message: '登录成功',
+            //   type: 'success',
+            //   duration: 2000
+            // })
+            // this.$router.push('/back')
+          // } else {
+          //   this.$message.error('登录失败')
+          // }
         } else {
           console.log('error submit!!')
           return false

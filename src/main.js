@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import './assets/fonts/iconfont.css'
 
 // 解决路由地址重复的报错问题
 import VueRouter from 'vue-router'
@@ -40,6 +41,8 @@ echarts.use(
 Vue.prototype.$echarts = echarts
 
 Vue.prototype.$axios = axios
+
+axios.defaults.baseURL = 'http://localhost:3000/'
 
 Vue.config.productionTip = false
 

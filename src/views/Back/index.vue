@@ -14,7 +14,7 @@
           :collapse-transition="false">
           <el-submenu :index="item.id" v-for="(item) in menu" :key="item.id">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i :class="item.img" style="margin-right:10px;"></i>
               <span>{{item.authName}}</span>
             </template>
              <!-- @click="saveNavState('/' + subItem.path)" -->
@@ -44,7 +44,7 @@
               <el-dropdown>
                 <span class="el-dropdown-link back-header-info">
                   <i class="el-icon-user back-header-info-user"></i>
-                  <span class="back-header-info-span">物管哥1号</span>
+                  <span class="back-header-info-span">{{adminName}}</span>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <router-link to="/adminAccountControl">
@@ -90,6 +90,7 @@ export default {
   name: 'Back',
   data () {
     return {
+      adminName: localStorage.getItem('adminName'),
       // isComponent: 'Home',
       isCollapse: false,
       // activePath: sessionStorage.getItem('activePath') || '/index',
@@ -98,6 +99,7 @@ export default {
           id: '100',
           authName: '首页',
           path: '/',
+          img: 'iconfont icon-shouye',
           children: [
             {
               id: '101',
@@ -111,6 +113,7 @@ export default {
           id: '200',
           authName: '消息发布',
           path: '/',
+          img: 'iconfont icon-fabu',
           children: [
             {
               id: '201',
@@ -128,6 +131,7 @@ export default {
         {
           id: '300',
           authName: '用户发布',
+          img: 'iconfont icon-fabu1',
           path: '/',
           children: [
             {
@@ -160,6 +164,7 @@ export default {
         {
           id: '400',
           authName: '模块管理',
+          img: 'iconfont icon-51wangluoanquan20_mokuai',
           path: '/',
           children: [
             {
@@ -177,6 +182,7 @@ export default {
         {
           id: '500',
           authName: '用户管理',
+          img: 'iconfont icon-yonghuguanli',
           path: '/',
           children: [
             {
@@ -194,6 +200,7 @@ export default {
         {
           id: '600',
           authName: '后台管理',
+          img: 'iconfont icon-houtaiguanli',
           path: '/',
           children: [
             {
@@ -262,6 +269,8 @@ export default {
         duration: 2000
       })
       this.$store.commit('outLogin')
+      localStorage.removeItem('adminId')
+      localStorage.removeItem('adminName')
       this.$router.push('/login')
     },
     clickTab (tab) {

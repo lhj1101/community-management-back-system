@@ -8,3 +8,34 @@ html,body,#app {
 a {
   text-decoration: none;
 }
+@media screen and (max-width: 500px) {
+  .el-dialog__wrapper /deep/ .el-dialog{
+    width: 90%;
+  }
+  .el-message-box__wrapper {
+    top: 50px !important;
+  }
+  .el-message-box__wrapper /deep/ .el-message-box {
+    width: 90% !important;
+  }
+}
+@media screen and (min-width: 501px) {
+  .el-dialog__wrapper /deep/ .el-dialog{
+    width: 70%;
+  }
+}
+@media screen and (min-width: 901px) {
+  .el-dialog__wrapper /deep/ .el-dialog{
+    width: 50%;
+  }
+}
+@media screen and (min-width: 1201px) {
+  .el-dialog__wrapper /deep/ .el-dialog{
+    width: 40%;
+  }
+}
+@media screen and (min-width: 1900px) {
+  .el-dialog__wrapper /deep/ .el-dialog{
+    width: 30%;
+  }
+}

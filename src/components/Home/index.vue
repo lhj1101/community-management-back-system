@@ -19,10 +19,10 @@
               <el-card class="home-card-one">
                 <!-- <div ref="main" style="height: 200px;"></div> -->
                 <div class="home-card-one-user">
-                  <i class="el-icon-star-off home-card-one-account-i"></i>
+                  <i class="iconfont icon-fangke home-card-one-account-i"></i>
                   <div class="home-card-one-user-title">
                     <p class="home-card-p">访客人数</p>
-                    <p class="home-card-number">123</p>
+                    <p class="home-card-number">{{total.visitor}}</p>
                   </div>
                 </div>
               </el-card>
@@ -31,10 +31,10 @@
               <el-card class="home-card-one">
                 <!-- <div ref="asd" style="height: 200px;"></div> -->
                 <div class="home-card-one-live">
-                  <i class="el-icon-star-off home-card-one-account-i"></i>
+                  <i class="iconfont icon-dibudaohanglan- home-card-one-account-i"></i>
                   <div class="home-card-one-live-title">
                     <p class="home-card-p">失物报备</p>
-                    <p class="home-card-number">123</p>
+                    <p class="home-card-number">{{total.lost}}</p>
                   </div>
                 </div>
               </el-card>
@@ -42,10 +42,10 @@
             <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
               <el-card class="home-card-one">
                 <div class="home-card-one-account">
-                  <i class="el-icon-star-off home-card-one-account-i"></i>
+                  <i class="iconfont icon-baoxiu-weixuanzhong home-card-one-account-i"></i>
                   <div class="home-card-one-account-title">
                     <p class="home-card-p">损坏报修</p>
-                    <p class="home-card-number">123</p>
+                    <p class="home-card-number">{{total.repair}}</p>
                   </div>
                 </div>
               </el-card>
@@ -53,10 +53,10 @@
             <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
               <el-card class="home-card-one">
                 <div class="home-card-one-account">
-                  <i class="el-icon-star-off home-card-one-account-i"></i>
+                  <i class="iconfont icon-tousu home-card-one-account-i"></i>
                   <div class="home-card-one-account-title">
                     <p class="home-card-p">投诉建议</p>
-                    <p class="home-card-number">123</p>
+                    <p class="home-card-number">{{total.complaint}}</p>
                   </div>
                 </div>
               </el-card>
@@ -95,18 +95,166 @@ export default {
   name: 'Home',
   data () {
     return {
+      total: {
+        visitor: '',
+        lost: '',
+        repair: '',
+        complaint: ''
+      },
+      repairoption: [],
+      temp1: 0,
+      temp2: 0,
+      temp3: 0,
+      temp4: 0,
+      lostList: [
+        { value: 0, name: '已找回' },
+        { value: 0, name: '未找回' }
+      ],
+      complaintList: [
+        { value: 0, name: '管理' },
+        { value: 0, name: '服务' },
+        { value: 0, name: '安保' },
+        { value: 0, name: '环境' },
+        { value: 0, name: '卫生' },
+        { value: 0, name: '其他' }
+      ],
+      goodsList: [
+        { value: 0, name: '家具' },
+        { value: 0, name: '服饰' },
+        { value: 0, name: '餐厨' },
+        { value: 0, name: '电器' },
+        { value: 0, name: '电子产品' },
+        { value: 0, name: '体育用品' },
+        { value: 0, name: '特产' },
+        { value: 0, name: '其他' }
+      ]
     }
   },
+  created () {
+    this.getTotal()
+  },
   mounted () {
-    this.zhexiantu()
-    this.qqq()
-    this.www()
-    this.typea()
+    // this.zhexiantu()
+    // this.qqq()
+    // this.www()
+    // this.typea()
   },
   methods: {
+    getTotal () {
+      this.getVistorTotal()
+      this.getLostTotal()
+      this.getRepairTotal()
+      this.getComplaintTotal()
+      this.getGoodsTotal()
+    },
+    // 获取访客人数
+    getVistorTotal () {
+      this.$axios.post('api/user/searchUserVisitor')
+        .then(res => {
+          console.log(res.data.data)
+          console.log(res.data.data.length)
+          this.total.visitor = res.data.data.length
+        })
+    },
+    // 获取失物数量
+    getLostTotal () {
+      this.$axios.post('api/user/searchUserLost')
+        .then(res => {
+          console.log(res.data.data)
+          res.data.data.forEach(item => {
+            if (item.lost_done === '已找回') {
+              this.lostList[0].value += 1
+            } else if (item.lost_done === '未找回') {
+              this.lostList[1].value += 1
+            }
+          })
+          this.qqq()
+          console.log(res.data.data.length)
+          this.total.lost = res.data.data.length
+        })
+    },
+    // 获取报修数量
+    getRepairTotal () {
+      this.$axios.post('api/user/searchUserRepair')
+        .then(res => {
+          console.log(res.data.data)
+          res.data.data.forEach(item => {
+            if (item.repair_extent === '轻微') {
+              this.temp1 += 1
+            } else if (item.repair_extent === '中等') {
+              this.temp2 += 1
+            } else if (item.repair_extent === '严重') {
+              this.temp3 += 1
+            } else if (item.repair_extent === '紧急') {
+              this.temp4 += 1
+            }
+          })
+          console.log(this.repairoption)
+          this.repairoption = [this.temp1, this.temp2, this.temp3, this.temp4]
+          this.zhexiantu()
+          console.log(this.repairoption)
+          console.log(res.data.data.length)
+          this.total.repair = res.data.data.length
+        })
+    },
+    // 获取投诉建议数量
+    getComplaintTotal () {
+      this.$axios.post('api/user/searchUserComplaint')
+        .then(res => {
+          console.log(res.data.data)
+          res.data.data.forEach(item => {
+            if (item.complaint_direction === '管理') {
+              this.complaintList[0].value += 1
+            } else if (item.complaint_direction === '服务') {
+              this.complaintList[1].value += 1
+            } else if (item.complaint_direction === '安保') {
+              this.complaintList[2].value += 1
+            } else if (item.complaint_direction === '环境') {
+              this.complaintList[3].value += 1
+            } else if (item.complaint_direction === '卫生') {
+              this.complaintList[4].value += 1
+            } else if (item.complaint_direction === '其他') {
+              this.complaintList[5].value += 1
+            }
+          })
+          this.www()
+          console.log(res.data.data.length)
+          this.total.complaint = res.data.data.length
+        })
+    },
+    // 获取商品数量
+    getGoodsTotal () {
+      this.$axios.post('api/user/searchUserMarketGoods')
+        .then(res => {
+          console.log(res.data.data)
+          res.data.data.forEach(item => {
+            if (item.goods_type === 'JJ') {
+              this.goodsList[0].value += 1
+            } else if (item.goods_type === 'FS') {
+              this.goodsList[1].value += 1
+            } else if (item.goods_type === 'CC') {
+              this.goodsList[2].value += 1
+            } else if (item.goods_type === 'DQ') {
+              this.goodsList[3].value += 1
+            } else if (item.goods_type === 'DZCP') {
+              this.goodsList[4].value += 1
+            } else if (item.goods_type === 'TYYP') {
+              this.goodsList[5].value += 1
+            } else if (item.goods_type === 'TC') {
+              this.goodsList[6].value += 1
+            } else if (item.goods_type === 'QT') {
+              this.goodsList[7].value += 1
+            }
+          })
+          this.typea()
+          console.log(res.data.data.length)
+          // this.total.complaint = res.data.data.length
+        })
+    },
+    // 图
     zhexiantu () {
       var myChart = this.$echarts.init(this.$refs.main)
-      var option = {
+      var repairoption = {
         title: {
           text: '损坏程度'
         },
@@ -118,10 +266,10 @@ export default {
         series: [{
           name: '损坏程度',
           type: 'bar',
-          data: [33, 15, 23, 14]
+          data: this.repairoption
         }]
       }
-      option && myChart.setOption(option)
+      repairoption && myChart.setOption(repairoption)
       window.addEventListener('resize', () => {
         myChart.resize()
       })
@@ -149,10 +297,7 @@ export default {
             labelLine: {
               show: true
             },
-            data: [
-              { value: 50, name: '已找回' },
-              { value: 10, name: '未找回' }
-            ]
+            data: this.lostList
           }
         ]
       }
@@ -176,14 +321,7 @@ export default {
             name: '投诉建议类型',
             type: 'pie',
             radius: '50%',
-            data: [
-              { value: 1048, name: '管理' },
-              { value: 888, name: '服务' },
-              { value: 735, name: '安保' },
-              { value: 580, name: '环境' },
-              { value: 484, name: '卫生' },
-              { value: 300, name: '其他' }
-            ],
+            data: this.complaintList,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -222,16 +360,7 @@ export default {
             itemStyle: {
               borderRadius: 5
             },
-            data: [
-              { value: 40, name: '家具' },
-              { value: 38, name: '服饰' },
-              { value: 32, name: '餐厨' },
-              { value: 30, name: '电器' },
-              { value: 28, name: '电子产品' },
-              { value: 26, name: '体育用品' },
-              { value: 22, name: '特产' },
-              { value: 18, name: '其他' }
-            ]
+            data: this.goodsList
           }
         ]
       }
@@ -263,6 +392,7 @@ export default {
 .home-card-one-account-i {
   font-size: 40px;
   padding: 10px;
+  color: rgb(64 158 255);
 }
 // .home-card-one-user-title > p, .home-card-one-live-title > p, .home-card-one-account-title > p {
 //   margin: 0;
